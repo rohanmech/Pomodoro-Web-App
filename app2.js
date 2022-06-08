@@ -1,4 +1,4 @@
-console.log("coded by Rohan :)");
+console.log("coded by Akash :)");
 const min = document.getElementById("min");
 const content = document.getElementById("content");
 const sec = document.getElementById("sec");
@@ -8,16 +8,23 @@ var task_status = document.getElementById("task_status");
 let interval1;
 let interval2;
 
+//-----------------check marks--------
+const checkmarks = document.getElementById('checkmark');
+
+const checkmarks_array = checkmarks.children;
+
+
 // timmings -----------------------------
 
-const work_timming = 2  // 25; //in minute
-const break_timming = 1  // 5; // in minute
-const long_break_timming = 3 // 30; //in minute
-
+const work_timming = 2; //in minute
+const break_timming = 2; // in minute
+const long_break_timming = 5; //in minute
+const setSecond = 3;
+const Total_time = work_timming * break_timming*setSecond * 1000;
 //--------------------------
 
-var Count_Lap = 1; //increments until 4
-var isTimmerRunning = false;
+ var Count_Lap = 1; //increments until 4
+ var isTimmerRunning = false;
 //--------------------------------------
 const tasks = ["POMODORO TIMER", "WORK", "BREAK", "LONG BREAK"];
 //------------------------------------------
@@ -34,42 +41,90 @@ apple_img.style.top = "-150px";
 apple_img.style.zIndex = "-99";
 
 //-----------------------------------------
+let timeout1;
 start_btn.addEventListener("click", () => {
   click_sound.play();
-  if (Count_Lap <= 4 && isTimmerRunning == false) {
-    console.log(Count_Lap);
-    isTimmerRunning = true;
-    task_status.innerHTML = tasks[1];
-    timmer(work_timming);
-  } else if (Count_Lap == 5) {
-    task_status.innerHTML = tasks[3];
-    console.log("long break");
-    Break(long_break_timming);
-  } else {
-    console.log("not running");
-    return;
+  if(!isTimmerRunning)
+  { isTimmerRunning=true;
+    timmer(work_timming);//1st cycle
+    
+    
+        setTimeout(() => {
+          
+         timeout1= timmer(work_timming); // 2nd cycle
+          setTimeout(() => {
+          
+            timmer(work_timming);// 3rd cycle
+    
+            setTimeout(() => {
+              
+              timmer(work_timming);// 4th cycle
+                
+              setTimeout(()=>{
+                task_status.innerHTML = tasks[3];
+                alarm_sound.play();
+                Break(long_break_timming);
+                isTimmerRunning=false; // long break cycle
+              },Total_time+10);   
+                  
+              
+            }, Total_time);
+          }, Total_time);
+        }, Total_time);
+    
+    
+    
   }
-});
+ 
+
+
+  }
+ 
+);
+// start_btn.addEventListener("click", () => {
+//   click_sound.play();
+//   if (Count_Lap <= 4 && isTimmerRunning == false) {
+//     console.log(Count_Lap);
+//     isTimmerRunning = true;
+//     task_status.innerHTML = tasks[1];
+//     timmer(work_timming);
+//   } else if (Count_Lap == 5) {
+//     task_status.innerHTML = tasks[3];
+//     console.log("long break");
+//     Break(long_break_timming);
+//   } else {
+//     console.log("not running");
+//     return;
+//   }
+// });
 
 //----------------------------------------
 
 function Break(time_limit) {
   const timeLimit = time_limit;
   let updating_min = timeLimit - 1;
-  let second = 6;  // 10;
+  let second = setSecond;
   interval2 = setInterval(() => {
     second--;
     if (second === -1) {
-      second = 5;  // 9;
+      second = setSecond - 1;
       updating_min--;
     }
     if (updating_min == 0 && second == 0) {
       console.log("breakover");
       timeout_sound.play();
+         if(!alarm_sound.ended)
+         {
+                alarm_sound.pause();
+                alarm_sound.currentTime=0;
+         }
       task_status.innerHTML = tasks[0];
-      clearInterval(interval2);
+      checkmarks_array[Count_Lap-1].style. visibility='visible'
       Count_Lap++;
-      isTimmerRunning = false;
+      
+      clearInterval(interval2);
+      
+      // isTimmerRunning = false;
     }
     console.log(updating_min);
 
@@ -86,12 +141,13 @@ function Break(time_limit) {
 function timmer(time_limit) {
   const timeLimit = time_limit;
   let updating_min = timeLimit - 1;
-  let second = 6;  // 60;
+  let second = setSecond;
 
   interval1 = setInterval(() => {
+    task_status.innerHTML = tasks[1];
     second--;
     if (second === -1) {
-      second = 5;  // 9;
+      second = setSecond - 1;
       updating_min--;
     }
     if (updating_min === 0 && second === 0) {
@@ -110,16 +166,33 @@ function timmer(time_limit) {
     sec.innerHTML = second;
 
     reset_btn.addEventListener("click", () => {
-      click_sound.play();
-      alarm_sound.pause();
-      alarm_sound.currentTime = 0;
-      task_status.innerHTML = tasks[0];
-      clearInterval(interval1);
-      clearInterval(interval2);
-      Count_Lap = 1;
-      isTimmerRunning = false;
-      min.innerHTML = "25";
-      sec.innerHTML = "00";
+      //debugger
+      
+     
+        click_sound.play();
+       
+        alarm_sound.pause();
+        alarm_sound.currentTime = 0;
+     
+     setTimeout(()=>{
+    location.reload();
+     
+     },500)
+        
+      
+     
+      // task_status.innerHTML = tasks[0];
+      
+      // clearInterval(interval1);
+      // clearInterval(interval2);
+      
+      // //
+      // //isTimmerRunning = false;
+      // min.innerHTML = "25";
+      // sec.innerHTML = "00";
+    
+      
+
     });
   }, 1000);
 }
