@@ -40,7 +40,7 @@ font-family: cursive;
 position: relative;
 padding-top: 40px;
 padding-bottom: 50px;
-top: 180px;
+top: 200px;
 color:white
 }
 #btn{
@@ -91,7 +91,7 @@ background-color: rgb(84, 250, 84);
 
 #task_status{
     position: relative;
-     top: 250px;
+     top: 270px;
   
     font-size: 1.5em;
     font-weight: bold;
@@ -99,4 +99,18 @@ background-color: rgb(84, 250, 84);
   
 }
 
+
+#checkmark{
+position: relative;
+top: 280px;
+color: rgb(76, 245, 146);
+font-weight: bolder;
+
+
+
+
+}
+#checkmark span{
+    visibility: hidden;
+}
 
